@@ -1,0 +1,5 @@
+name = "hello in toml"
+
+[server]
+path = "8080"
+names = ["hello", "world"]
