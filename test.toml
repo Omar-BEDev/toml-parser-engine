@@ -1,5 +1,11 @@
-name = "hello in toml"
-
+# config
 [server]
-path = "8080"
-names = ["hello", "world"]
+server.database.name = "my_database"
+welcome_msg = "Salam!\nMarhba."
+log_path = 'C:\Users\Admin\logs'
+coordinates = { city = "Casablanca", lat = +33.57, lon = -7.58 }
+max_visitors = 1_000_000
+temp_min = -5
+temp_max = +40
+deployment_time = 2026-10-03T14:30:00.500+01:00
+allowed_ports = [80, 443, 8080]
