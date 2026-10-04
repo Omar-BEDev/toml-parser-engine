@@ -1,5 +1,5 @@
 # object files
 *.o
 # excutable file
-tpe
+main
 .vscode
