@@ -1,5 +1,10 @@
 # object files
 *.o
+bin
+
 # excutable file
 main
 .vscode
+
+# personal notes
+notes.md
