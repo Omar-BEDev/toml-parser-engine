@@ -1,5 +1,6 @@
 #include "arena.h"
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 
 ArenaNode init_arena_head_node() {
@@ -19,7 +20,7 @@ Arena init_father_arena() {
     return a;
 }
 
-Arena init_children_arena(unsigned long long childrenSize) {
+Arena init_children_arena(uint64_t childrenSize) {
     Arena a = {
     .arenaStart = NULL,
     .currentSize = 0,
@@ -31,7 +32,7 @@ Arena init_children_arena(unsigned long long childrenSize) {
 
 Arena* search_last_arena_node(ArenaNode *an) {
     if (!an->head) return NULL;
-    uint i = 0;
+    uint64_t i = 0;
     Arena *currentArena = an->head;
     while(i < an->length) {
         if (!currentArena->next) {
@@ -42,9 +43,9 @@ Arena* search_last_arena_node(ArenaNode *an) {
     return currentArena;
 }
 
-Arena make_new_children_arena(Arena *father_arena, unsigned long long childrenArenaSize) {
+Arena make_new_children_arena(Arena *father_arena, uint64_t childrenArenaSize) {
     bool isAllocated = allocate_arena_memory(father_arena, childrenArenaSize);
-    if (!isAllocated) {
+    if (isAllocated == false) {
         Arena a = init_children_arena(0);
         return a;
     }
@@ -53,7 +54,7 @@ Arena make_new_children_arena(Arena *father_arena, unsigned long long childrenAr
     return a;
 }
 
-void* arena_alloc(Arena *a, size_t size, size_t align) {
+void* arena_alloc(Arena *a, uint64_t size, uint64_t align) {
     if (!a->arenaStart) {
         return NULL;
     }
