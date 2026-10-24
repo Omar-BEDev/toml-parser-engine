@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstddef>
 #include <sys/types.h>
+#include <cstdint>
 
 typedef struct Arena {
     char* arenaStart;
@@ -17,15 +18,15 @@ typedef struct Arena {
 
 typedef struct ArenaNode {
     Arena* head;
-    uint length;
+    uint64_t length;
 } ArenaNode;
 
 /*
 * this design is a lifetime of memory management of program 
 * one malloc and one free with the arenas spaces for diffrent uses
-
 */
 #ifdef _WIN32
+    
     #include <windows.h>
 #else 
 #include <sys/mman.h>
@@ -40,7 +41,7 @@ inline void* allocate_memory() {
 return NULL;
 }
 
-inline int allocate_arena_memory(Arena *father_arena, size_t arenaSize) {
+inline int allocate_arena_memory(Arena *father_arena, uint64_t arenaSize) {
     if (!father_arena || !father_arena->arenaStart ||
         // to ignore capcity overflow in father arena 
         father_arena->currentSize + arenaSize > father_arena->capacity ||
@@ -48,9 +49,12 @@ inline int allocate_arena_memory(Arena *father_arena, size_t arenaSize) {
         return 0;
     }
     #ifdef _WIN32
-        DWORD old_protect;
-        return VirtualProtect(father_arena->arenaStart + father_arena->currentSize,
-                              arenaSize, PAGE_READWRITE, &old_protect);
+        void* currentChildrenPtr = father_arena->arenaStart + father_arena->currentSize;
+        void* ptr  =  VirtualAlloc(currentChildrenPtr ,arenaSize, MEM_COMMIT, PAGE_READWRITE);
+        if (!ptr) {
+            return 0;
+        }
+        else return 1;
     #else
         int result = mprotect(father_arena->arenaStart + father_arena->currentSize,
                               arenaSize, PROT_READ | PROT_WRITE);
@@ -73,9 +77,9 @@ inline int free_memory(void* addr) {
     return 0;
 }
 
-void* arena_alloc(Arena *a, size_t size, size_t align);
+void* arena_alloc(Arena *a, uint64_t size, uint64_t align);
 int arena_free(Arena *a);
 Arena init_father_arena();
 ArenaNode init_arena_head_node();
-Arena make_new_children_arena(Arena *father_arena, unsigned long long childrenArenaSize);
+Arena make_new_children_arena(Arena *father_arena, uint64_t childrenArenaSize);
 #endif
