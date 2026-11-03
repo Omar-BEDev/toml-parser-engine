@@ -1,5 +1,6 @@
 #include "../src/arena/arena.h"
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <gtest/gtest.h>
 
@@ -20,7 +21,7 @@ TEST(Arena, ArenaAllocationTest) {
         GB_1 + 1
     };
     Arena children[childCount] = {};
-    uint arenaCapacityOverflowAllocationTestIndex = 3; 
+    uint64_t arenaCapacityOverflowAllocationTestIndex = 3; 
     for (size_t i = 0; i < childCount; ++i) {
         children[i] = make_new_children_arena(&father, capacities[i]);
         
