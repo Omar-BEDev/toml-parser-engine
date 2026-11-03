@@ -1,4 +1,6 @@
+#include "io/rfc.h"
 
-int main() {
- 
+/* project entry point; wiring lands here */
+int main(void) {
+    return 0;
 }
