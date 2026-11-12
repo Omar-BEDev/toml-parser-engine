@@ -1,33 +1,15 @@
 #ifndef TOKEN
 #define TOKEN
 
-#include <string_view>
+#include <cstdint>
 
-typedef enum TokenType {
-    ASSIGMENT,
-    OPEN_BRACES,
-    CLOSE_BRACES,
-    DOUBLE_QUOTATION,
-    HASHTAG,
-    POINT,
-    OPEN_CURLY_BRACES,
-    CLOSE_CURLY_BRACES,
-    QUOTATION,
-    BACKSLACH,
-    UUNDERSCORE,
-    COLON,
-    // because is just symbols for history not for mathematics operation ------
-    ADDITION_S,
-    SUBSTRACTION_S,
-    // ------------------------------------------------------------------------
-    NOT_FOUND
-} TokenType;
-
-
+/* the lexer stores a variable name/value lexeme as pointer + byte size
+   (not NUL-terminated) */
 typedef struct Token {
-    std::string_view value;
-    TokenType tokenType;
+    char* value;
+    uint64_t size;
 } Token;
 
+Token init_token(char* value_begin, uint64_t size);
 
 #endif
